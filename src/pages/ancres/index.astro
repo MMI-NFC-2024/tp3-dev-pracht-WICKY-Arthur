@@ -1,0 +1,166 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import PlotFigure from "../../components/PlotFigure.astro";
+import * as Plot from "@observablehq/plot";
+import penguins from "../../assets/penguins.json";
+import Menu from "../../components/Menu.astro";
+
+const adeliePenguins = penguins.filter(({ species }) => species === "Adelie");
+const chinStrapPenguins = penguins.filter(
+    ({ species }) => species === "Chinstrap",
+);
+const gentooPenguins = penguins.filter(({ species }) => species === "Gentoo");
+---
+
+<Layout>
+    <Menu />
+    <div class="p-4">
+        <h1 class="text-3xl font-bold mb-6 pl-10 mt-2">Penguins avec Ancres et Slider</h1>
+
+        <nav class="sticky top-0">
+            <ul class="flex gap-6 pl-10">
+                <li>
+                    <a
+                        href="#adelie"
+                        class="text-blue-600 hover:text-blue-800 font-medium"
+                        >Adelie Penguins</a
+                    >
+                </li>
+                <li>
+                    <a
+                        href="#chinstrap"
+                        class="text-blue-600 hover:text-blue-800 font-medium"
+                        >Chinstrap Penguins</a
+                    >
+                </li>
+                <li>
+                    <a
+                        href="#gentoo"
+                        class="text-blue-600 hover:text-blue-800 font-medium"
+                        >Gentoo Penguins</a
+                    >
+                </li>
+            </ul>
+        </nav>
+
+        <div class="slider-container overflow-x-hidden">
+            <div class="slider-track flex">
+                <div id="adelie" class="slider-item min-w-500">
+                    <div class="py-10">
+                        <h2 class="text-2xl font-bold mb-4">Adelie Penguins</h2>
+                        <PlotFigure
+                            options={{
+                                width: 800,
+                                height: 500,
+                                grid: true,
+                                x: { label: "Culmen Length (mm)" },
+                                y: { label: "Culmen Depth (mm)" },
+                                marks: [
+                                    Plot.dot(adeliePenguins, {
+                                        x: "culmen_length_mm",
+                                        y: "culmen_depth_mm",
+                                        fill: "island",
+                                        title: (d) =>
+                                            `${d.sex}, Island: ${d.island}`,
+                                    }),
+                                ],
+                            }}
+                        />
+                    </div>
+                </div>
+                <div id="chinstrap" class="slider-item min-w-500">
+                    <div class="py-10">
+                        <h2 class="text-2xl font-bold mb-4">
+                            Chinstrap Penguins
+                        </h2>
+                        <PlotFigure
+                            options={{
+                                width: 800,
+                                height: 500,
+                                margin: 40,
+                                grid: true,
+                                x: { label: "Culmen Length (mm)" },
+                                y: { label: "Culmen Depth (mm)" },
+                                marks: [
+                                    Plot.dot(chinStrapPenguins, {
+                                        x: "culmen_length_mm",
+                                        y: "culmen_depth_mm",
+                                        fill: "island",
+                                        title: (d) =>
+                                            `${d.sex}, Island: ${d.island}`,
+                                    }),
+                                ],
+                            }}
+                        />
+                    </div>
+                </div>
+                <div id="gentoo" class="slider-item">
+                    <div class="py-10">
+                        <h2 class="text-2xl font-bold mb-4">Gentoo Penguins</h2>
+                        <PlotFigure
+                            options={{
+                                width: 800,
+                                height: 500,
+                                margin: 40,
+                                grid: true,
+                                x: { label: "Culmen Length (mm)" },
+                                y: { label: "Culmen Depth (mm)" },
+                                marks: [
+                                    Plot.dot(gentooPenguins, {
+                                        x: "culmen_length_mm",
+                                        y: "culmen_depth_mm",
+                                        fill: "island",
+                                        title: (d) =>
+                                            `${d.sex}, Island: ${d.island}`,
+                                    }),
+                                ],
+                            }}
+                        />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</Layout>
+
+<style>
+    .slider-container {
+        width: 100%;
+        scroll-behavior: smooth;
+        overflow-x: scroll;
+        scroll-snap-type: x mandatory;
+    }
+
+    .slider-track {
+        width: 355%;
+    }
+
+    .slider-item {
+        scroll-snap-align: start;
+        height: 100%;
+        padding: 1rem;
+    }
+</style>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const anchors = document.querySelectorAll('a[href^="#"]');
+
+        anchors.forEach((anchor) => {
+            anchor.addEventListener("click", function (e) {
+                e.preventDefault();
+
+                const targetId = this.getAttribute("href").substring(1);
+                const targetElement = document.getElementById(targetId);
+
+                if (targetElement) {
+                    targetElement.scrollIntoView({
+                        behavior: "smooth",
+                        block: "start",
+                        inline: "start",
+                    });
+                }
+            });
+        });
+    });
+</script>

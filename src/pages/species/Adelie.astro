@@ -1,0 +1,28 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import PlotFigure from "../../components/PlotFigure.astro";
+import * as Plot from "@observablehq/plot";
+import penguins from "../../assets/penguins.json";
+const penguinsAdelie = penguins.filter(({ species }) => species === "Adelie");
+import Menu from "../../components/Menu.astro";
+---
+
+<Layout>
+    <Menu />
+    <div class="p-4 pt-0">
+        <h1 class="text-3xl font-bold mb-6 pl-10 mt-2">Penguins Adelie</h1>
+        <div class="pl-10 py-4">
+            <PlotFigure
+                options={{
+                    marks: [
+                        Plot.dot(penguinsAdelie, {
+                            x: "culmen_length_mm",
+                            y: "culmen_depth_mm",
+                            stroke: "species",
+                        }),
+                    ],
+                }}
+            />
+        </div>
+    </div>
+</Layout>
