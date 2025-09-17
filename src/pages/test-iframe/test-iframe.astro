@@ -7,42 +7,16 @@ import Layout from "../../layouts/Layout.astro";
 
     <div class="flex flex-col gap-4 px-8">
         <div class="pb-2">
-            <nav>
-                <ul class="flex gap-4 pl-4">
-                    <li>
-                        <a
-                            href="/species/Adelie"
-                            target="penguin-frame"
-                            class="text-blue-600 hover:underline">Adelie</a
-                        >
-                    </li>
-                    <li>
-                        <a
-                            href="/species/Chinstrap"
-                            target="penguin-frame"
-                            class="text-blue-600 hover:underline">Chinstrap</a
-                        >
-                    </li>
-                    <li>
-                        <a
-                            href="/species/Gentoo"
-                            target="penguin-frame"
-                            class="text-blue-600 hover:underline">Gentoo</a
-                        >
-                    </li>
-                    <li>
-                        <a
-                            href="/"
-                            target="penguin-frame"
-                            class="text-blue-600 hover:underline"
-                            >Tous les pingouins</a
-                        >
-                    </li>
-                    <li>
-                        <a href="/">Retour</a>
-                    </li>
-                </ul>
-            </nav>
+            <div class="pb-2">
+                <select id="species" class="p-2 border rounded">
+                    <option value="Adelie">Adelie</option>
+                    <option value="Chinstrap">Chinstrap</option>
+                    <option value="Gentoo">Gentoo</option>
+                    <option value="">Tous les pingouins</option>
+                </select>
+                <a href="/" class="ml-4 text-blue-600 hover:underline">Retour</a
+                >
+            </div>
         </div>
 
         <div class="w-full">
@@ -65,5 +39,20 @@ import Layout from "../../layouts/Layout.astro";
                 iframe.style.height = height + 50 + "px";
             }, 100);
         }
+        document
+            .querySelector("#species")
+            ?.addEventListener("change", (evt) => {
+                const value = (evt.target as HTMLSelectElement).value;
+                const iframe = document.getElementById(
+                    "penguin-iframe",
+                ) as HTMLIFrameElement;
+
+                // Mise à jour de l'attribut src de l'iframe
+                if (value === "") {
+                    iframe.src = "/"; // Pour "Tous les pingouins"
+                } else {
+                    iframe.src = "/species/" + value;
+                }
+            });
     </script>
 </Layout>

@@ -15,37 +15,21 @@ const gentooPenguins = penguins.filter(({ species }) => species === "Gentoo");
 <Layout>
     <Menu />
     <div class="p-4">
-        <h1 class="text-3xl font-bold mb-6 pl-10 mt-2">Penguins avec Ancres et Slider</h1>
+        <h1 class="text-3xl font-bold mb-6 pl-10 mt-2">
+            Penguins avec Ancres et Slider
+        </h1>
 
         <nav class="sticky top-0">
-            <ul class="flex gap-6 pl-10">
-                <li>
-                    <a
-                        href="#adelie"
-                        class="text-blue-600 hover:text-blue-800 font-medium"
-                        >Adelie Penguins</a
-                    >
-                </li>
-                <li>
-                    <a
-                        href="#chinstrap"
-                        class="text-blue-600 hover:text-blue-800 font-medium"
-                        >Chinstrap Penguins</a
-                    >
-                </li>
-                <li>
-                    <a
-                        href="#gentoo"
-                        class="text-blue-600 hover:text-blue-800 font-medium"
-                        >Gentoo Penguins</a
-                    >
-                </li>
-            </ul>
+            <select id="species-select" class="p-2 border rounded">
+                <option value="adelie">Adelie Penguins</option>
+                <option value="chinstrap">Chinstrap Penguins</option>
+                <option value="gentoo">Gentoo Penguins</option>
+            </select>
         </nav>
 
         <div class="slider-container overflow-x-hidden">
             <div class="slider-track flex">
-                <div id="adelie" class="slider-item min-w-500">
+                <div id="Adelie" class="slider-item min-w-500">
                     <div class="py-10">
                         <h2 class="text-2xl font-bold mb-4">Adelie Penguins</h2>
                         <PlotFigure
@@ -132,7 +116,7 @@ const gentooPenguins = penguins.filter(({ species }) => species === "Gentoo");
     }
 
     .slider-track {
-        width: 355%;
+        width: 360%;
     }
 
     .slider-item {
@@ -144,23 +128,39 @@ const gentooPenguins = penguins.filter(({ species }) => species === "Gentoo");
 
 <script>
     document.addEventListener("DOMContentLoaded", () => {
-        const anchors = document.querySelectorAll('a[href^="#"]');
+        const selectElement = document.getElementById("species-select");
+        if (window.location.hash) {
+            const currentSpecies = window.location.hash.substring(1);
+            if (selectElement) {
+                selectElement.value = currentSpecies;
+            }
+        }
+        selectElement?.addEventListener("change", (evt) => {
+            const value = (evt.target as HTMLSelectElement).value;
+            window.location.hash = value;
 
-        anchors.forEach((anchor) => {
-            anchor.addEventListener("click", function (e) {
-                e.preventDefault();
-
-                const targetId = this.getAttribute("href").substring(1);
-                const targetElement = document.getElementById(targetId);
-
-                if (targetElement) {
-                    targetElement.scrollIntoView({
-                        behavior: "smooth",
-                        block: "start",
-                        inline: "start",
-                    });
-                }
-            });
+            const targetElement = document.getElementById(value);
+            if (targetElement) {
+                targetElement.scrollIntoView({
+                    behavior: "smooth",
+                    block: "start",
+                    inline: "start",
+                });
+            }
+        });
+        window.addEventListener("hashchange", () => {
+            const species = window.location.hash.substring(1);
+            if (selectElement && selectElement.value !== species) {
+                selectElement.value = species;
+            }
+            const targetElement = document.getElementById(species);
+            if (targetElement) {
+                targetElement.scrollIntoView({
+                    behavior: "smooth",
+                    block: "start",
+                    inline: "start",
+                });
+            }
         });
     });
 </script>
