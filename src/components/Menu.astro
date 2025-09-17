@@ -2,23 +2,28 @@
 
 ---
 
-<div class="p-2 container w-full px-14 py-8 font-bold shadow-md mb-4">
+<div class="p-2 w-full px-14 py-8 font-bold shadow-md mb-4">
     <ul class="flex gap-4">
         <li>
             <a href="/">Tous les pingouins</a>
         </li>
         <li>
-            <a href="/species/Adelie">Adelie</a>
-        </li>
-        <li>
-            <a href="/species/Chinstrap">Chinstrap</a>
-        </li>
-        <li>
-            <a href="/species/Gentoo">Gentoo</a>
-        </li>
-        <li>
             <a href="/test-iframe/test-iframe">Test-iframe</a>
         </li>
         <li><a href="/ancres">Ancres</a></li>
+        <li>
+            <select id="species">
+                <option value="Adelie">Adelie</option>
+                <option value="Chinstrap">Chinstrap</option>
+                <option value="Gentoo">Gentoo</option>
+            </select>
+        </li>
     </ul>
 </div>
+
+<script>
+    document.querySelector("#species")?.addEventListener("change", (evt) => {
+        const value = (evt.target as HTMLSelectElement).value;
+        location.pathname = "/species/" + value;
+    });
+</script>
